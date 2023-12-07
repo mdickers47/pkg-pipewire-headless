@@ -27,8 +27,14 @@ units might have to be modified too!
 
 After installing you will need to:
 
-systemctl enable pipewire
-systemctl enable pipewire-pulse
-systemctl enable wireplumber
++ `systemctl enable pipewire`
++ `systemctl enable pipewire-pulse`
++ `systemctl enable wireplumber`
 
-- 2023-12-06 mikeyd
+If you want everything showing up at the RTP receiver to come directly
+out the speakers, then somewhere you will have to also do this:
+
++ `pw-link -Ilio # should see a bunch of things`
++ `pw-link 37 49 # patch thing 37 -> 49`
+
+2023-12-06 mikeyd
