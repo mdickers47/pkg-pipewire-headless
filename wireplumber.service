@@ -1,0 +1,22 @@
+[Unit]
+Description=Pipewire Session Manager (wireplumber)
+Requires=pipewire.service
+
+[Service]
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
+RestrictNamespaces=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+Type=simple
+AmbientCapabilities=CAP_SYS_NICE
+Restart=on-failure
+RuntimeDirectory=pipewire
+RuntimeDirectoryPreserve=yes
+Environment=PIPEWIRE_RUNTIME_DIR=%t/pipewire
+User=pipewire
+ExecStart=/usr/bin/wireplumber -c /etc/wireplumber/headless.conf
+
+[Install]
+WantedBy=default.target
