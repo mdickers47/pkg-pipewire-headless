@@ -5,15 +5,13 @@
 # 2023-12-04 M. Dickerson <pomonamikey@gmail.com>
 
 pkgname="pipewire-headless"
-pkgver="20240902.01"
-pkgrel="13"
+pkgver="20250520.01"
+pkgrel="14"
 pkgdesc="Configuration and unit files for headless pipewire"
 arch=("any")
 url="https://pipewire.org/"
 license=("MIT")
-#provides=("mongodb=$pkgver")
-#conflicts=("mongodb" "mongodb-bin")
-depends=("pipewire" "wireplumber>=0.5" "pipewire-pulse")
+depends=("pipewire" "wireplumber>=0.5" "pipewire-pulse" "pipewire-zeroconf")
 makedepends=()
 source=(
   "headless.conf"
@@ -23,6 +21,7 @@ source=(
   "systemd-sysuser.conf"
   "10-disable-dbus.conf"
   "20-rtp-source.conf"
+  "30-zeroconf.conf"
   "systemd-tmpfile.conf"
   "pipewire-pulse.service"
   "pipewire-pulse.socket"
@@ -37,13 +36,12 @@ sha256sums=(
 "bac23531378f7e894a89460e5a0bad2aeb25f28440801142d1e3faa61f940492"
 "28c7076af7747b27c9c6057353a6b91fb081e845e8aa2c195ff939bf2702b6bc"
 "759f5ca6475b7c4d34e612afcdfa2e56fd797ab07e2aadf0f359327bd662e716"
+"c7d558813b2c67e8632905bd363486f6fa49ff4b108055219ca9f9a5aa2f03d1"
 "5653d3555b6ef7ab8266949060d0837b8abb1efb8b44da664b0cc306de3320cd"
 "e6fcde6cdb45ad087688b3840ec75091ffc06fac6619f3dd2ffd00943a89dcc6"
 "185bf5a11cf458ad934422059f889a8a79ba02b21e2c8b3a2a38d4cfb0caf64f"
 "f280c97dd6a487cb4594debe9aabc0a2fabbcb69feb16491275d013955e1b16d"
 )
-
-#backup=("etc/mongodb.conf")
 
 prepare() {
   /bin/true
@@ -64,8 +62,9 @@ package() {
   install -Dm755 -t "${pkgdir}/etc/pipewire/pipewire.conf.d" \
     "${srcdir}/10-disable-dbus.conf" \
     "${srcdir}/20-rtp-source.conf"
-  install -Dm644 "${srcdir}/pipewire-pulse.conf" \
-    "${pkgdir}/etc/pipewire/pipewire-pulse.conf.d/10-disable-dbus.conf"
+  install -Dm644  -t "${pkgdir}/etc/pipewire/pipewire-pulse.conf.d" \
+    "${srcdir}/pipewire-pulse.conf" \
+    "${srcdir}/30-zeroconf.conf"
   install -Dm755 -t "${pkgdir}/etc/systemd/system" \
     "${srcdir}/pipewire.service" \
     "${srcdir}/pipewire.socket" \
